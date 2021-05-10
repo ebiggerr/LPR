@@ -8,7 +8,6 @@ function [image] = preProcessing(source)
     
     % median filter to remove noise
     image = medfilt2(image);
-    image = medfilt2(image);
     %return the processed image
     
 end
