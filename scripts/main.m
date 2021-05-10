@@ -27,30 +27,53 @@ end
 MAX_HEIGHT = 900;
 
 picture = imread(getPicture);
-[height,width]=size(picture);
+[height,width,depth]=size(picture);
 
-% resize the image of the resolution is too big
-if (height >= MAX_HEIGHT )
+% oriWidth = width;
+% oriHeight= height;
+
+% resize the image of the resolution is too big ( height > MAX_HEIGHT) 
+if (height > MAX_HEIGHT )
     picture = imresize(picture, 0.5);
-    %[height,width]=size(picture);
+    [resizedHeight,resizedwidth]=size(picture);
 else
     %imshow(picture);
 end
 
 % run the core LPR function
-result = detectLicensePlateAndDrawBoundingBox(picture);
-% display the result
-imshow(result);
+image = detectLicensePlateAndDrawBoundingBox(picture);
 
-function [processed] = detectLicensePlateAndDrawBoundingBox(source)
+
+%% CORE function of License Plate Recognition
+% PARAM - original RGB image
+% RETURN - coordinates  
+function [result] = detectLicensePlateAndDrawBoundingBox(source)
     
     % pre processing the image
     greyscale = preProcessing(source);
     
+    % edge detection using Sobel
     edge = edgeDetection(greyscale);
     
+    result = bwareaopen(edge,70,8);
+
+    result1 = bwareaopen(result,20,8);
     
+    figure(5),imshow(source);
+    [L,~]=bwlabeln(result,8);
+    propied=regionprops(L,'BoundingBox');
     
+    hold on
+    pause(1)
+    for n=1:size(propied,1)
+      rectangle('Position',propied(n).BoundingBox,'EdgeColor','g','LineWidth',2)
+    end
+    hold off
+    
+    result= result1;
+
 end
+
+
 
 

@@ -1,10 +1,10 @@
 function [result] = edgeDetection(source)
     
     % edge detection using Sobel
-    temp = edge(source,'Sobel',0.25,'both');
+    result = edge(source,'sobel',0.28,'both');
     %imshowpair(source,temp,'montage')
     
-    result= temp;
+   
     
 end
 
